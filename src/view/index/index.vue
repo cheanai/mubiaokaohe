@@ -20,7 +20,13 @@
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon><location /></el-icon>
-                  <span>商品列表</span>
+                  <span>师资队伍管理</span>
+                </template>
+              </el-sub-menu>
+              <el-sub-menu index="2">
+                <template #title>
+                  <el-icon><location /></el-icon>
+                  <span>管理</span>
                 </template>
               </el-sub-menu>
             </el-menu>
