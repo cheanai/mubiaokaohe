@@ -20,8 +20,16 @@
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon><location /></el-icon>
-                  <span>商品列表</span>
+                  <span>师资管理</span>
                 </template>
+                <el-menu-item>
+                  <el-icon><location /></el-icon>
+                  <span>师资管理</span>
+                </el-menu-item>
+                <el-menu-item>
+                  <el-icon><location /></el-icon>
+                  <span>师资管理</span>
+                </el-menu-item>
               </el-sub-menu>
             </el-menu>
           </el-aside>
