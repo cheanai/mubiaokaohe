@@ -1,8 +1,14 @@
 <template>
   <el-aside width="250px">
-    <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo" :default-active="$router.path"
-      text-color="#fff" :router="true">
-      <el-sub-menu >
+    <el-menu
+      active-text-color="#ffd04b"
+      background-color="#545c64"
+      class="el-menu-vertical-demo"
+      :default-active="$router.path"
+      text-color="#fff"
+      :router="true"
+    >
+      <el-sub-menu>
         <template #title>
           <el-icon><Avatar /></el-icon>
           <span>师资管理</span>
@@ -109,12 +115,15 @@
     </el-menu>
   </el-aside>
 </template>
-<script setup>
-</script>
+<script setup></script>
 <style lang="scss" scoped>
 .el-aside {
   .el-menu {
     height: calc(100vh - 80px);
   }
 }
+::-webkit-scrollbar {
+     width: 0px;
+     height: 0px;
+ }
 </style>

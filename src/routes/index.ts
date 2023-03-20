@@ -24,6 +24,11 @@ let routes = [
       },
     ],
   },
+  {
+    path: "/dialog",
+    name: "dialog",
+    component: () => import("@/view/homeView.vue"),
+  },
 ];
 // 路由
 const router = createRouter({

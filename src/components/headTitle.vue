@@ -4,7 +4,7 @@
       <div class="logo_div left"><img src="@/assets/logo.png" class="logo" />
         <h2>后台管理系统</h2>
       </div>
-      <div class="logOff_div right"><span class="quit-login">退出登录</span></div>
+      <div class="logOff_div right"><span class="quit-login"><RouterLink to="/">退出登录</RouterLink></span></div>
     </div>
   </el-header>
 </template>
@@ -15,6 +15,11 @@
 <style lang="scss" scoped>
 * {
   padding: 0px;
+}
+a{
+color: #fff;
+text-decoration: none
+
 }
 
 .left {
