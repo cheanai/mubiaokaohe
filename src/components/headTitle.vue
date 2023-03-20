@@ -1,10 +1,11 @@
 <template>
   <el-header>
-    <el-row :gutter="20">
-      <el-col :span="4"><img src="../assets/logo.png" class="logo" /></el-col>
-      <el-col :span="16"><h2>后台管理系统</h2></el-col>
-      <el-col :span="4"><span class="quit-login">退出登录</span></el-col>
-    </el-row>
+    <div class="header">
+      <div class="logo_div left"><img src="@/assets/logo.png" class="logo" />
+        <h2>后台管理系统</h2>
+      </div>
+      <div class="logOff_div right"><span class="quit-login">退出登录</span></div>
+    </div>
   </el-header>
 </template>
 
@@ -12,11 +13,39 @@
 </script>
 
 <style lang="scss" scoped>
+* {
+  padding: 0px;
+}
+
+.left {
+  background-color: #545c64;
+  float: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.right {
+  float: right;
+  padding-right: 50px
+}
+
+.header {
+  height: 80px;
+}
+
+.logo_div {
+  width: 249px;
+  height: 80px;
+}
+
 .el-header {
   height: 80px;
   background: #666;
+
   .logo {
-    height: 80px;
+    height: 50px;
   }
 
   h2,
@@ -26,5 +55,4 @@
     line-height: 80px;
     color: #fff;
   }
-}
-</style>
+}</style>

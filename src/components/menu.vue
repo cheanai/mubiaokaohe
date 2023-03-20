@@ -1,7 +1,7 @@
 <template>
   <el-aside width="250px">
-    <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo" default-active="2"
-      text-color="#fff">
+    <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo" :default-active="$router.path"
+      text-color="#fff" :router="true">
       <el-sub-menu >
         <template #title>
           <el-icon><Avatar /></el-icon>
@@ -12,7 +12,7 @@
             <el-icon><UserFilled /></el-icon>
             <span>教师培养与引进</span>
           </template>
-          <el-menu-item :index="1_1">
+          <el-menu-item index="/index/two">
             <el-icon>
               <location />
             </el-icon>
@@ -87,7 +87,9 @@
         </el-sub-menu>
         <el-sub-menu :index="3">
           <template #title>
-            <el-icon><Management /></el-icon>
+            <el-icon>
+              <location />
+            </el-icon>
             <span>师资国际化</span>
           </template>
           <el-menu-item :index="3_1">

@@ -4,7 +4,9 @@
   <el-container>
     <el-container>
       <menuLift></menuLift>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view/>
+      </el-main>
     </el-container>
   </el-container>
 </div>
@@ -17,6 +19,8 @@ import headTitle from "@/components/headTitle.vue";
 
 <style lang="scss">
 body {
+user-select: none;
 margin: 0px;
+padding: 0px;
 }
 </style>
