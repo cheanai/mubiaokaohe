@@ -7,7 +7,14 @@ const meau = [
             {
                 name:'二级菜单1-1',
                 icon:'el-icon-user',
-                path:'/index/menu11'
+                path:'/index/menu11',
+                child:[
+                    {
+                    name:'三级菜单1-1',
+                    icon:'el-icon-user',
+                    path:'/index/menu111'
+                }
+                ]
             },
             {
                 name:'二级菜单1-2',
