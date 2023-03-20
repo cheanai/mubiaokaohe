@@ -20,10 +20,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          class="login-btn"
-          @click="submitForm()"
+        <el-button type="primary" class="login-btn" @click="submitForm()"
           >登录
         </el-button>
         <el-button class="login-btn" @click="resetForm">重置</el-button>
@@ -32,54 +29,51 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs} from "vue";
-import { LoginData } from "@/type/login";
+<script lang="ts" setup>
+import { reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 
-
-export default defineComponent({
-    
-  setup() {
-    const data = reactive(new LoginData());
-    const router = useRouter();
-    const rules = {
-      username: [
-        { required: true, message: "请输入账号", trigger: "blur" },
-        { min: 3, max: 10, message: "账号的长度在3-10之间", trigger: "blur" },
-      ],
-      password: [
-        { required: true, message: "请输入密码", trigger: "blur" },
-        { min: 3, max: 10, message: "密码的长度在3-10之间", trigger: "blur" },
-      ],
-    };
-    const submitForm =()=>{
-        // 保留当前页，页面跳转至 /home 页
-        router.push("/index");
-    };
-    //重置
-    const resetForm = () => {
-      data.ruleForm.username = "";
-      data.ruleForm.password = "";
-    };
-
-    return {
-      ...toRefs(data),
-      rules,
-      resetForm,
-      submitForm,
-    };
+const state = reactive({
+  ruleForm: {
+    username: "",
+    password: "",
   },
 });
+const router = useRouter();
+const rules = {
+  username: [
+    { required: true, message: "请输入账号", trigger: "blur" },
+    { min: 3, max: 10, message: "账号的长度在3-10之间", trigger: "change" },
+  ],
+  password: [
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { min: 3, max: 10, message: "密码的长度在3-10之间", trigger: "change" },
+  ],
+};
+let { ruleForm } = toRefs(state);
+const submitForm = () => {
+  // 保留当前页，页面跳转至 /home 页
+  router.push("/index");
+};
+//重置
+const resetForm = () => {
+  ruleForm.value.username="",
+  ruleForm.value.password=""
+};
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+body {
+  margin: 0px;
+}
+
 .login-box {
   width: 100%;
   height: 100vh;
   background-color: #ecf0f3;
   text-align: center;
   padding: 1px;
+
   .demo-ruleForm {
     width: 500px;
     margin: 200px auto;
@@ -87,12 +81,15 @@ export default defineComponent({
     padding: 40px;
     border-radius: 5px;
   }
+
   .login-btn {
     width: 48%;
   }
+
   h2 {
     margin-bottom: 20px;
   }
+
   .main {
     position: relative;
     padding: 25px;
