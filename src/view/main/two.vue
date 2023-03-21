@@ -14,7 +14,8 @@
                 <el-table-column property="name" label="Name" width="200" />
                 <el-table-column property="address" label="Address" />
             </el-table> -->
-            <two></two>
+            <two></tw
+            o>
         </el-dialog>
         <el-select v-model="value" class="m-2" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
