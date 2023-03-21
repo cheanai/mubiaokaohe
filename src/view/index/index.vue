@@ -18,6 +18,10 @@ import headTitle from "@/components/headTitle.vue";
 </script>
 
 <style lang="scss">
+.el-main{
+  padding: 0px;
+  background-image: url("@/assets/index.png");
+}
 body {
 user-select: none;
 margin: 0px;

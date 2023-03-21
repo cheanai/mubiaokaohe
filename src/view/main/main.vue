@@ -1,13 +1,15 @@
 <template>
-    <div>
-        <h1>1111</h1>
-    </div>
+    <div class="img_div"></div>
 </template>
 
 <script setup lang="ts">
 
 </script>
 
-<style scoped>
-
+<style>
+.img_div{
+    width: 100%;
+    height: 100%;
+    background-image: url("@/assets/index.png");
+}
 </style>
