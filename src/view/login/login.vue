@@ -63,6 +63,9 @@ const submitForm = () => {
     })
   .then((response :AxiosResponse<any>) => {
     console.log(response.data);
+    if(response.data='false'){
+      router.push("/index");
+    };
   })
   .catch((error: AxiosError) => {
     console.log(error);
