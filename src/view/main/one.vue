@@ -10,11 +10,6 @@
         <div class="butten_div">
             <el-button type="primary" plain @click="dialogTableVisible = true">新增</el-button>
             <el-dialog v-model="dialogTableVisible" title="Shipping address">
-                <!-- <el-table :data="gridData">
-                    <el-table-column property="date" label="Date" width="150" />
-                    <el-table-column property="name" label="Name" width="200" />
-                    <el-table-column property="address" label="Address" />
-                </el-table> -->
                 <two></two>
             </el-dialog>
             <el-select v-model="value" class="m-2" placeholder="Select">
@@ -24,14 +19,17 @@
             <el-button plain>搜索</el-button>
         </div>
         <div class="table_div">
-            <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class">
-                <el-table-column prop="name" label="姓名"></el-table-column>
-                <el-table-column prop="age" label="年龄"></el-table-column>
-                <el-table-column prop="gender" label="性别"></el-table-column>
-                <el-table-column prop="type" label="类型"></el-table-column>
+            <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class" row-class-name="table-row">
+                <el-table-column prop="Title" label="主题"></el-table-column>
+                <el-table-column prop="Type" label="类型"></el-table-column>
+                <el-table-column prop="Location" label="地点"></el-table-column>
+                <el-table-column prop="Time" label="开始时间"></el-table-column>
+                <el-table-column prop="Participants" label="参与学院"></el-table-column>
                 <el-table-column prop="state" label="状态"></el-table-column>
-                <el-table-column prop="opeation" label="操作"><el-button plain>搜索</el-button><el-button
-                        plain>搜索</el-button></el-table-column>
+                <el-table-column prop="opeation" label="操作"><template v-slot="scope">
+                        <el-button plain v-if="scope.row.Participants">搜索</el-button>
+                        <el-button plain v-if="scope.row.Participants">搜索</el-button>
+                    </template></el-table-column>
             </el-table>
 
         </div>
@@ -43,50 +41,63 @@
 </template>
 
 <script setup lang="ts">
-import { Search } from "@element-plus/icons-vue";
-import two from "@/view/dialog/two.vue";
+import { Search} from "@element-plus/icons-vue";
+import two from "@/view/dialog/dialog.vue";
+import { useMain } from '@/store/home'
+import axios from "axios";
+import { AxiosResponse,AxiosError} from 'axios';
+const store =useMain(); 
 const dialogTableVisible = ref(false);
-const gridData = [
-    {
-        date: '2016-05-02',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-    },
-    {
-        date: '2016-05-04',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-    },
-    {
-        date: '2016-05-01',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-    },
-    {
-        date: '2016-05-03',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-    },
-]
 const input2 = ref("");
-const tableData = [
-    { id: 1, name: "张三", age: "18", gender: "男" },
-    { id: 2, name: "李四", age: 20, gender: "女" },
-    { id: 3, name: "王五", age: 22, gender: "男" },
-    { id: 4, name: "赵六", age: 24, gender: "女" },
-    { id: 1, name: "张三", age: 18, gender: "男" },
-    { id: 2, name: "李四", age: 20, gender: "女" },
-    { id: 3, name: "王五", age: 22, gender: "男" },
-    { id: 4, name: "赵六", age: 24, gender: "女" },
-    { id: 1, name: "张三", age: 18, gender: "男" },
-    { id: 2, name: "李四", age: 20, gender: "女" },
-    { id: 3, name: "王五", age: 22, gender: "男" },
-    { id: 4, name: "赵六", age: 24, gender: "女" },
-    { id: 1, name: "张三", age: 18, gender: "男" },
-    { id: 2, name: "李四", age: 20, gender: "女" },
-    { id: 3, name: "王五", age: 22, gender: "男" },
-    { id: 4, name: "赵六", age: 24, gender: "女" },
+interface education_training_info {
+    "Title": string,
+    "Time": string,
+    "Location": string,
+    "Participants": string,
+    "Type": string,
+    "state": string
+
+}
+const tableData: education_training_info[] = [
+    {
+        "Title": "如何写好简历",
+        "Time": "2022-04-15",
+        "Location": "A101",
+        "Participants": "全体教职工",
+        "Type": "内训",
+        "state": ""
+    },
+    {
+        "Title": "公务员面试技巧",
+        "Time": "2022-05-08",
+        "Location": "B202",
+        "Participants": "报名人员",
+        "Type": "公开课",
+        "state": ""
+    },
+    {
+        "Title": "高效时间管理",
+        "Time": "2022-06-20",
+        "Location": "C305",
+        "Participants": "全体教职工",
+        "Type": "内训",
+        "state": ""
+    }
 ];
+axios.get('/select',{
+      params: {
+        Participants: store.department,
+        educationTraining: 'education_training_info',
+      }
+    })
+  .then((response :AxiosResponse<any>) => {
+    if(response.data!=''){
+      console.log(response.data);
+    };
+  })
+  .catch((error: AxiosError) => {
+    console.log(error);
+  });
 const value = "选择状态";
 const options = [
     {
@@ -129,9 +140,10 @@ const getTableData = computed(() => {
 </script>
 
 <style scoped>
-.body_div{
+.body_div {
     margin: 20px;
 }
+
 .butten_div {
     padding-top: 20px;
     display: inline-flex;
@@ -170,5 +182,8 @@ const getTableData = computed(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.table_div ::v-deep(.table-row td){
+    height: 50px;
 }
 </style>

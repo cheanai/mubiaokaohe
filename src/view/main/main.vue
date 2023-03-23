@@ -10,6 +10,6 @@
 .img_div{
     width: 100%;
     height: 100%;
-    background-image: url("@/assets/index.png");
+    background-image: url("@/assets/background.png");
 }
 </style>

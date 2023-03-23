@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import two from "@/view/dialog/two.vue";
+import two from "@/view/dialog/dialog.vue";
 const dialogTableVisible = ref(false);
 const gridData = [
     {

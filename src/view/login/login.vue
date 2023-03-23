@@ -34,7 +34,7 @@ import { reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse,AxiosError} from 'axios';
-
+import { useMain } from '@/store/home'
 
 const state = reactive({
   ruleForm: {
@@ -54,22 +54,27 @@ const rules = {
   ],
 };
 let { ruleForm } = toRefs(state);
+const store =useMain();
 const submitForm = () => {
   axios.get('/login',{
       params: {
-        age: 30,
-        userName: 'user',
+        pwd: ruleForm.value.password,
+        userName: ruleForm.value.username,
       }
     })
   .then((response :AxiosResponse<any>) => {
-    console.log(response.data);
+    if(response.data!=''){
+      store.setData(response.data);
+      console.log(ruleForm.value.username);
+      // 保留当前页，页面跳转至 /home 页
+      router.push("/index");
+    };
   })
   .catch((error: AxiosError) => {
     console.log(error);
   });
 
-  // 保留当前页，页面跳转至 /home 页
-  //router.push("/index");
+  
 };
 //重置
 const resetForm = () => {

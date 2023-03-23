@@ -2,14 +2,14 @@
   <el-aside width="250px">
     <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
       :default-active="$router.path" text-color="#fff" :router="true">
-      <el-sub-menu>
+      <el-sub-menu :index="String(111)">
         <template #title>
           <el-icon>
             <Avatar />
           </el-icon>
           <span>师资管理</span>
         </template>
-        <el-sub-menu :index="1">
+        <el-sub-menu :index="String(1)">
           <template #title>
             <el-icon>
               <UserFilled />
@@ -59,7 +59,7 @@
             <span>双师型教师</span>
           </el-menu-item>
         </el-sub-menu>
-        <el-sub-menu :index="2">
+        <el-sub-menu :index="String(2)">
           <template #title>
             <el-icon>
               <TrendCharts />
@@ -91,7 +91,7 @@
             <span>人才称号申报</span>
           </el-menu-item>
         </el-sub-menu>
-        <el-sub-menu :index="3">
+        <el-sub-menu :index="String(3)">
           <template #title>
             <el-icon>
               <HelpFilled />

@@ -4,12 +4,15 @@
       <div class="logo_div left"><img src="@/assets/logo.png" class="logo" />
         <h2>后台管理系统</h2>
       </div>
-      <div class="logOff_div right"><span class="quit-login"><RouterLink to="/">退出登录</RouterLink></span></div>
+      <div class="logOff_div right"><span>欢迎{{store.name}}</span><span class="quit-login"><RouterLink to="/">退出登录</RouterLink></span></div>
     </div>
   </el-header>
 </template>
 
-<script setup>
+<script  setup>
+import { useMain } from '@/store/home'
+const store =useMain();
+
 </script>
 
 <style lang="scss" scoped>
@@ -33,7 +36,9 @@ text-decoration: none
 
 .right {
   float: right;
-  padding-right: 50px
+  padding-right: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .header {
@@ -47,7 +52,7 @@ text-decoration: none
 
 .el-header {
   height: 80px;
-  background: #666;
+  background-image:url("@/assets/head.jpg");
 
   .logo {
     height: 50px;
@@ -59,5 +64,6 @@ text-decoration: none
     height: 80px;
     line-height: 80px;
     color: #fff;
+    margin-left: 20px;
   }
 }</style>
