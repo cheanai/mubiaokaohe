@@ -19,7 +19,8 @@
             <el-button plain>搜索</el-button>
         </div>
         <div class="table_div">
-            <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class" row-class-name="table-row">
+            <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
+                row-class-name="table-row">
                 <el-table-column prop="Title" label="主题"></el-table-column>
                 <el-table-column prop="Type" label="类型"></el-table-column>
                 <el-table-column prop="Location" label="地点"></el-table-column>
@@ -41,12 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import { Search} from "@element-plus/icons-vue";
+import { Search } from "@element-plus/icons-vue";
 import two from "@/view/dialog/dialog.vue";
 import { useMain } from '@/store/home'
-import axios from "axios";
+import axios from "@/api/axiosInstance";
 import { AxiosResponse,AxiosError} from 'axios';
-const store =useMain(); 
+const store = useMain();
 const dialogTableVisible = ref(false);
 const input2 = ref("");
 interface education_training_info {
@@ -58,7 +59,7 @@ interface education_training_info {
     "state": string
 
 }
-const tableData: education_training_info[] = [
+let tableData: education_training_info[] = [
     {
         "Title": "如何写好简历",
         "Time": "2022-04-15",
@@ -68,36 +69,34 @@ const tableData: education_training_info[] = [
         "state": ""
     },
     {
-        "Title": "公务员面试技巧",
-        "Time": "2022-05-08",
-        "Location": "B202",
-        "Participants": "报名人员",
-        "Type": "公开课",
+        "Title": "如何写好简历",
+        "Time": "2022-04-15",
+        "Location": "A101",
+        "Participants": "全体教职工",
+        "Type": "内训",
         "state": ""
     },
     {
-        "Title": "高效时间管理",
-        "Time": "2022-06-20",
-        "Location": "C305",
+        "Title": "如何写好简历",
+        "Time": "2022-04-15",
+        "Location": "A101",
         "Participants": "全体教职工",
         "Type": "内训",
         "state": ""
     }
 ];
-axios.get('/select',{
-      params: {
-        Participants: store.department,
-        educationTraining: 'education_training_info',
-      }
+axios.get('/selectEducationTraining')
+    .then((response: AxiosResponse<any>) => {
+        if (response.data != '') {
+            console.log(tableData);
+            console.log(response.data);
+            tableData=response.data;
+            console.log(tableData)
+        };
     })
-  .then((response :AxiosResponse<any>) => {
-    if(response.data!=''){
-      console.log(response.data);
-    };
-  })
-  .catch((error: AxiosError) => {
-    console.log(error);
-  });
+    .catch((error: AxiosError) => {
+        console.log(error);
+    });
 const value = "选择状态";
 const options = [
     {
@@ -183,7 +182,8 @@ const getTableData = computed(() => {
     justify-content: center;
     align-items: center;
 }
-.table_div ::v-deep(.table-row td){
+
+.table_div ::v-deep(.table-row td) {
     height: 50px;
 }
 </style>
