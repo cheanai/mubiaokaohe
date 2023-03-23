@@ -69,6 +69,9 @@ const submitForm = () => {
       // 保留当前页，页面跳转至 /home 页
       router.push("/index");
     };
+    if(response.data='false'){
+      router.push("/index");
+    };
   })
   .catch((error: AxiosError) => {
     console.log(error);
