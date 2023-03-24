@@ -20,7 +20,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="login-btn" @click="submitForm()"
+        <el-button type="primary" class="login-btn" @click="submitForm((ruleFormRef))"
           >登录
         </el-button>
         <el-button class="login-btn" @click="resetForm">重置</el-button>
@@ -33,9 +33,10 @@
 import { reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import axios from "@/api/axiosInstance";
+import type { FormInstance } from 'element-plus'
 import { AxiosResponse,AxiosError} from 'axios';
 import { useMain } from '@/store/home'
-
+const ruleFormRef = ref<FormInstance>()
 const state = reactive({
   ruleForm: {
     username: "",
@@ -46,17 +47,20 @@ const router = useRouter();
 const rules = {
   username: [
     { required: true, message: "请输入账号", trigger: "blur" },
-    { min: 3, max: 10, message: "账号的长度在3-10之间", trigger: "change" },
+    { min: 3, max: 10, message: "账号的长度在3-10之间", trigger: "blur" },
   ],
   password: [
     { required: true, message: "请输入密码", trigger: "blur" },
-    { min: 3, max: 10, message: "密码的长度在3-10之间", trigger: "change" },
+    { min: 3, max: 10, message: "密码的长度在3-10之间", trigger: "blur" },
   ],
 };
 let { ruleForm } = toRefs(state);
 const store =useMain();
-const submitForm = () => {
-  axios.get('/login',{
+const submitForm =(formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      axios.get('/login',{
       params: {
         pwd: ruleForm.value.password,
         userName: ruleForm.value.username,
@@ -73,6 +77,11 @@ const submitForm = () => {
   .catch((error: AxiosError) => {
     console.log(error);
   });
+    } else {
+      console.log('error submit!')
+    }
+  })
+  
 
   
 };

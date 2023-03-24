@@ -9,8 +9,8 @@
         </div>
         <div class="butten_div">
             <el-button type="primary" plain @click="dialogTableVisible = true">新增</el-button>
-            <el-dialog v-model="dialogTableVisible" title="Shipping address">
-                <two></two>
+            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据">
+                <two @FatherClick="Click"></two>
             </el-dialog>
             <el-select v-model="value" class="m-2" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -21,11 +21,11 @@
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
                 row-class-name="table-row">
-                <el-table-column prop="Title" label="主题"></el-table-column>
-                <el-table-column prop="Type" label="类型"></el-table-column>
-                <el-table-column prop="Location" label="地点"></el-table-column>
-                <el-table-column prop="Time" label="开始时间"></el-table-column>
-                <el-table-column prop="Participants" label="参与学院"></el-table-column>
+                <el-table-column prop="title" label="主题"></el-table-column>
+                <el-table-column prop="type" label="类型"></el-table-column>
+                <el-table-column prop="location" label="地点"></el-table-column>
+                <el-table-column prop="time" label="开始时间"></el-table-column>
+                <el-table-column prop="participants" label="参与学院"></el-table-column>
                 <el-table-column prop="state" label="状态"></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
                         <el-button plain v-if="scope.row.Participants">搜索</el-button>
@@ -46,52 +46,19 @@ import { Search } from "@element-plus/icons-vue";
 import two from "@/view/dialog/dialog.vue";
 import { useMain } from '@/store/home'
 import axios from "@/api/axiosInstance";
-import { AxiosResponse,AxiosError} from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 const store = useMain();
 const dialogTableVisible = ref(false);
 const input2 = ref("");
-interface education_training_info {
-    "Title": string,
-    "Time": string,
-    "Location": string,
-    "Participants": string,
-    "Type": string,
-    "state": string
-
-}
-let tableData: education_training_info[] = [
-    {
-        "Title": "如何写好简历",
-        "Time": "2022-04-15",
-        "Location": "A101",
-        "Participants": "全体教职工",
-        "Type": "内训",
-        "state": ""
-    },
-    {
-        "Title": "如何写好简历",
-        "Time": "2022-04-15",
-        "Location": "A101",
-        "Participants": "全体教职工",
-        "Type": "内训",
-        "state": ""
-    },
-    {
-        "Title": "如何写好简历",
-        "Time": "2022-04-15",
-        "Location": "A101",
-        "Participants": "全体教职工",
-        "Type": "内训",
-        "state": ""
-    }
-];
+let tableData = ref([]);
 axios.get('/selectEducationTraining')
     .then((response: AxiosResponse<any>) => {
         if (response.data != '') {
-            console.log(tableData);
+            console.log(tableData.value);
             console.log(response.data);
-            tableData=response.data;
-            console.log(tableData)
+            tableData.value = response.data;
+            triggerRef(tableData);
+            console.log(tableData.value)
         };
     })
     .catch((error: AxiosError) => {
@@ -120,19 +87,23 @@ const options = [
         label: "Option5",
     },
 ];
+const Click = () => {
+    dialogTableVisible.value = false;
+    console.log(dialogTableVisible);
+};
 const pageSize = 10; // 每页显示的行数
 const currentPage = ref(1); // 当前页码
-const total = computed(() => tableData.length); // 总行数
+const total = computed(() => tableData.value.length); // 总行数
 const handleCurrentChange = (newPage: number) => {
     currentPage.value = newPage;
 };
 const getTableData = computed(() => {
     const start = (currentPage.value - 1) * pageSize;
     const end = start + pageSize;
-    let data = tableData.slice(start, end);
+    let data = tableData.value.slice(start, end);
     // 如果当前页显示的数据行数小于每页显示的行数，就添加空行
     while (data.length < pageSize) {
-        data.push({ id: -1, name: "", age: "", gender: "" });
+        data.push({});
     }
     return data;
 });
