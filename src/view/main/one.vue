@@ -9,14 +9,14 @@
         </div>
         <div class="butten_div">
             <el-button type="primary" plain @click="dialogTableVisible = true">新增</el-button>
-            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据">
+            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据" destroy-on-close>
                 <two @FatherClick="Click"></two>
             </el-dialog>
-            <el-select v-model="value" class="m-2" placeholder="Select">
+            <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <el-input v-model="input2" class="w-50 m-2" placeholder="Type something" :prefix-icon="Search" />
-            <el-button plain>搜索</el-button>
+            <el-input v-model="input" class="w-50 m-2" placeholder="搜索主题" :prefix-icon="Search" />
+            <el-button plain @Click="searchdata">搜索</el-button>
         </div>
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
@@ -25,14 +25,12 @@
                 <el-table-column prop="type" label="类型"></el-table-column>
                 <el-table-column prop="location" label="地点"></el-table-column>
                 <el-table-column prop="time" label="开始时间"></el-table-column>
-                <el-table-column prop="participants" label="参与学院"></el-table-column>
+                <el-table-column prop="department" label="参与学院"></el-table-column>
                 <el-table-column prop="state" label="状态"></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
-                        <el-button plain v-if="scope.row.Participants">搜索</el-button>
-                        <el-button plain v-if="scope.row.Participants">搜索</el-button>
+                        <el-button plain v-if="scope.row.department" @Click="edit(scope.row.id)">修改</el-button>
                     </template></el-table-column>
             </el-table>
-
         </div>
         <div class="pagination">
             <el-pagination layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page.sync="currentPage"
@@ -44,52 +42,114 @@
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
 import two from "@/view/dialog/dialog.vue";
-import { useMain } from '@/store/home'
+import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
 const dialogTableVisible = ref(false);
-const input2 = ref("");
-let tableData = ref([]);
-axios.get('/selectEducationTraining')
-    .then((response: AxiosResponse<any>) => {
-        if (response.data != '') {
-            console.log(tableData.value);
-            console.log(response.data);
+const input = ref("");
+const searchdata = () => {
+    console.log(input.value)
+    console.log(value.value)
+    if (value.value == "") {
+        console.log("--------")
+        axios.get("/selectEducationTrainingByTitle", {
+            params: {
+                title: input.value,
+                department: store.department
+            }
+        }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
             triggerRef(tableData);
-            console.log(tableData.value)
-        };
+            console.log(tableData.value);
+        })
+    } else {
+        axios.get("/selectEducationTrainingByTitleAndState", {
+            params: {
+                state: value.value,
+                title: input.value,
+                department: store.department
+            }
+        }).then((response: AxiosResponse<any>) => {
+            tableData.value = response.data;
+            triggerRef(tableData);
+            console.log(tableData.value);
+        })
+    }
+}
+let tableData = ref([]);
+const edit = (id: number) => {
+    console.log(id);
+    axios.get("/selectEducationTrainingById", {
+        params: {
+            id:id
+        }
+    }).then((response) => {
+        console.log(response.data)
+        store.celldata = response.data;
+        console.log(store.celldata)
+        dialogTableVisible.value=true;
     })
-    .catch((error: AxiosError) => {
-        console.log(error);
-    });
-const value = "选择状态";
+}
+const select = () => {
+    axios
+        .get("/selectEducationTraining")
+        .then((response: AxiosResponse<any>) => {
+            if (response.data != "") {
+                tableData.value = response.data;
+                triggerRef(tableData);
+                console.log(tableData.value);
+            }
+        })
+        .catch((error: AxiosError) => {
+            console.log(error);
+        });
+}
+select();
+const value = ref("");
 const options = [
     {
-        value: "Option1",
-        label: "Option1",
+        value: "未审核",
+        label: "未审核",
     },
     {
-        value: "Option2",
-        label: "Option2",
+        value: "已通过",
+        label: "已通过",
     },
     {
-        value: "Option3",
-        label: "Option3",
+        value: "未通过",
+        label: "未通过",
     },
     {
-        value: "Option4",
-        label: "Option4",
-    },
-    {
-        value: "Option5",
-        label: "Option5",
-    },
+        value: "",
+        label: "所有状态",
+    }
 ];
+const dataFilter = () => {
+    if (input.value == "") {
+        if (value.value == "") {
+            select();
+            return
+        }
+        axios.get("/selectEducationTrainingByState", {
+            params: {
+                state: value.value,
+                department: store.department
+            }
+        }).then((response: AxiosResponse<any>) => {
+            tableData.value = response.data;
+            triggerRef(tableData);
+            console.log(tableData.value);
+        })
+    } else {
+        searchdata();
+    }
+
+}
 const Click = () => {
     dialogTableVisible.value = false;
     console.log(dialogTableVisible);
+    select();
 };
 const pageSize = 10; // 每页显示的行数
 const currentPage = ref(1); // 当前页码

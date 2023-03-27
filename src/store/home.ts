@@ -1,16 +1,16 @@
-import { defineStore} from "pinia";
+import { defineStore } from "pinia";
 // useMain  可以是 useUser、useCart 之类的名字
 // defineStore('main',{..}) 在devtools 就使用 main 这个名
 interface UserData {
-    department: string;
-    email: string;
-    name: string;
-    password: string;
-    phoneNumber: string;
-    userId: number;
-    userName: string;
-    userType: string;
-  }
+  department: string;
+  email: string;
+  name: string;
+  password: string;
+  phoneNumber: string;
+  userId: number;
+  userName: string;
+  userType: string;
+}
 export const useMain = defineStore("main", {
   // 相当于data
   state: () => ({
@@ -22,12 +22,20 @@ export const useMain = defineStore("main", {
     userId: 0,
     userName: "",
     userType: "",
+    celldata:{
+      id:-1, 
+      title:"", 
+      time:new Date, 
+      location:"", 
+      department:"", 
+      type:"", 
+      state:""
+    },
   }),
   // 相当于计算属性
   getters: {},
   // 相当于vuex的 mutation + action，可以同时写同步和异步的代码
-  
-  
+
   actions: {
     setData(data: UserData) {
       this.department = data.department;
@@ -40,5 +48,4 @@ export const useMain = defineStore("main", {
       this.userType = data.userType;
     },
   },
-  
 });

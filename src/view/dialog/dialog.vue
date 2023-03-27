@@ -51,15 +51,25 @@ const dataform = reactive({
     department: string
   }
 })
-
 let { form } = toRefs(dataform);
+const editForm = ()=>{
+  console.log(store.celldata);
+  form.value.title=store.celldata.title;
+  form.value.type=store.celldata.type;
+  form.value.location=store.celldata.location;
+  form.value.time=store.celldata.time;
+  form.value.department=store.celldata.department;
+  triggerRef(form);
+}
+editForm();
 const submitForm =async (formEl: FormInstance | undefined) => {
   if (!formEl)return
   await formEl.validate((valid) =>{
     if (valid) {
       console.log(form.value);
-      axios.post("/insertEducationTraining", form.value);
-      emits("FatherClick");
+      axios.post("/insertEducationTraining", form.value)
+      .then(()=>{emits("FatherClick")});
+      
     }else{
       console.log('未通过');
     }
