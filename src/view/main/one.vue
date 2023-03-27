@@ -2,15 +2,16 @@
     <div class="body_div">
         <div>
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/index' }">产品列表</el-breadcrumb-item>
-                <el-breadcrumb-item>iPhone 13 Pro Max</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>师资管理</el-breadcrumb-item>
+                <el-breadcrumb-item>教师培养与引进</el-breadcrumb-item>
+                <el-breadcrumb-item>宣传教育培养</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="butten_div">
             <el-button type="primary" plain @click="dialogTableVisible = true">新增</el-button>
             <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据" destroy-on-close>
-                <two @FatherClick="Click"></two>
+                <DialogForm @FatherClick="Click" v-model:info="info"></DialogForm>
             </el-dialog>
             <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -24,11 +25,24 @@
                 <el-table-column prop="title" label="主题"></el-table-column>
                 <el-table-column prop="type" label="类型"></el-table-column>
                 <el-table-column prop="location" label="地点"></el-table-column>
-                <el-table-column prop="time" label="开始时间"></el-table-column>
+                <el-table-column prop="time" label="开始时间"><template #default="scope">
+                        <div style="display: flex; align-items: center" v-if=scope.row.time>
+                            <el-icon>
+                                <timer />
+                            </el-icon>
+                            <span style="margin-left: 10px">{{ scope.row.time }}</span>
+                        </div>
+                    </template></el-table-column>
                 <el-table-column prop="department" label="参与学院"></el-table-column>
-                <el-table-column prop="state" label="状态"></el-table-column>
+                <el-table-column prop="state" label="状态"><template #default="scope">
+                        <div v-if=scope.row.state>
+                            <span style="color:skyblue;" v-if="scope.row.state==='未审核'"><b>{{ scope.row.state }}</b></span>
+                            <span style="color:crimson;" v-if="scope.row.state==='未通过'"><b>{{ scope.row.state }}</b></span>
+                            <span style="color:green;" v-if="scope.row.state==='已通过'"><b>{{ scope.row.state }}</b></span>
+                        </div>
+                    </template></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
-                        <el-button plain v-if="scope.row.department" @Click="edit(scope.row.id)">修改</el-button>
+                        <el-button type="primary" plain v-if="scope.row.department" @Click="edit(scope.row.id)">修改</el-button>
                     </template></el-table-column>
             </el-table>
         </div>
@@ -41,7 +55,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import two from "@/view/dialog/dialog.vue";
+import DialogForm from "@/view/dialog/dialog.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
@@ -78,22 +92,26 @@ const searchdata = () => {
     }
 }
 let tableData = ref([]);
+let info = ref();
 const edit = (id: number) => {
     console.log(id);
     axios.get("/selectEducationTrainingById", {
         params: {
-            id:id
+            id: id
         }
     }).then((response) => {
         console.log(response.data)
-        store.celldata = response.data;
-        console.log(store.celldata)
-        dialogTableVisible.value=true;
+        info.value = response.data;
+        dialogTableVisible.value = true;
     })
 }
 const select = () => {
     axios
-        .get("/selectEducationTraining")
+        .get("/selectEducationTraining", {
+            params: {
+                department: store.department
+            }
+        })
         .then((response: AxiosResponse<any>) => {
             if (response.data != "") {
                 tableData.value = response.data;

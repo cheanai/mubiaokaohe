@@ -4,7 +4,7 @@
       <div class="logo_div left"><img src="@/assets/logo.png" class="logo" />
         <h2>后台管理系统</h2>
       </div>
-      <div class="logOff_div right"><span>欢迎{{store.name}}</span><span class="quit-login"><RouterLink to="/">退出登录</RouterLink></span></div>
+      <div class="logOff_div right"><span>欢迎{{store.name}}</span><span class="quit-login"><RouterLink to="/" @Click="logoff">退出登录</RouterLink></span></div>
     </div>
   </el-header>
 </template>
@@ -12,7 +12,9 @@
 <script  setup>
 import { useMain } from '@/store/home'
 const store =useMain();
-
+const logoff=()=>{
+  store.$reset();
+}
 </script>
 
 <style lang="scss" scoped>

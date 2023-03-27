@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import { useMain } from "@/store/home";
 let routes = [
   {
     path: "/",
@@ -9,7 +9,7 @@ let routes = [
   {
     path: "/index",
     name: "index",
-    redirect: {name: 'main' },
+    redirect: { name: "main" },
     component: () => import("@/view/index/index.vue"),
     children: [
       {
@@ -92,7 +92,6 @@ let routes = [
         name: "fifteen",
         component: () => import("@/view/main/fifteen.vue"),
       },
-      
     ],
   },
   {
@@ -105,6 +104,18 @@ let routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+router.beforeEach((to, from, next) => {
+  const store = useMain();
+  console.log(store.name);
+  if (to.path !== "/" && !store.name) {
+    // 即使位置与当前位置相同，也会触发导航。
+    // 注意，这也将向历史记录中添加一个新条目，除非“replace:true”`通过
+    // 添加 force 字段后，地址栏不会在登录失效后，跳转到其他页面，点击history只会停留在/login
+    next({ path: "/", replace: true ,force:true});
+  } else {
+    next();
+  }
 });
 // 导出
 export default router;

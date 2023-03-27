@@ -38,12 +38,14 @@ const rules = {
 };
 const dataform = reactive({
   form: {
+    id: -1,
     title: "",
     type: "",
     location: "",
     time: new Date(),
     department: store.department
   } as {
+    id: number,
     title: string,
     type: string,
     location: string,
@@ -52,25 +54,36 @@ const dataform = reactive({
   }
 })
 let { form } = toRefs(dataform);
-const editForm = ()=>{
-  console.log(store.celldata);
-  form.value.title=store.celldata.title;
-  form.value.type=store.celldata.type;
-  form.value.location=store.celldata.location;
-  form.value.time=store.celldata.time;
-  form.value.department=store.celldata.department;
-  triggerRef(form);
+const props = defineProps({
+  info: {
+    type: Object
+  }
+});
+const edit = () => {
+  console.log(props.info);
+  form.value.title = props.info?.title;
+  form.value.type = props.info?.type;
+  form.value.location = props.info?.location;
+  form.value.time = props.info?.time;
+  form.value.id = props.info?.id;
 }
-editForm();
-const submitForm =async (formEl: FormInstance | undefined) => {
-  if (!formEl)return
-  await formEl.validate((valid) =>{
+if (props.info) {
+  console.log(props.info);
+  edit();
+}
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate((valid) => {
     if (valid) {
-      console.log(form.value);
-      axios.post("/insertEducationTraining", form.value)
-      .then(()=>{emits("FatherClick")});
-      
-    }else{
+      if (form.value.id != -1) {
+        axios.post("/updateEducationTraining", form.value)
+          .then(() => { emits("FatherClick") });
+      } else {
+        axios.post("/insertEducationTraining", form.value)
+          .then(() => { emits("FatherClick") });
+      }
+
+    } else {
       console.log('未通过');
     }
   });

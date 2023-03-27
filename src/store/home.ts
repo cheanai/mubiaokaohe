@@ -21,16 +21,7 @@ export const useMain = defineStore("main", {
     phoneNumber: "",
     userId: 0,
     userName: "",
-    userType: "",
-    celldata:{
-      id:-1, 
-      title:"", 
-      time:new Date, 
-      location:"", 
-      department:"", 
-      type:"", 
-      state:""
-    },
+    userType: ""
   }),
   // 相当于计算属性
   getters: {},
@@ -48,4 +39,7 @@ export const useMain = defineStore("main", {
       this.userType = data.userType;
     },
   },
+  persist: {
+    enabled: true
+  }
 });

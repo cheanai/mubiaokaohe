@@ -4,13 +4,14 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import mitt from 'mitt'
-//routes
-import router from "./routes/index"; 
 //pinia
 import { createPinia } from 'pinia' 
+import piniaPluginPersist from 'pinia-plugin-persist'
 import axios from '@/api/axiosInstance.js'
+//routes
+import router from "./routes/index"; 
 const pinia = createPinia()
-
+pinia.use(piniaPluginPersist)
 const app= createApp(App)
 
 // 全局注册
