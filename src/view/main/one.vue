@@ -36,13 +36,14 @@
                 <el-table-column prop="department" label="参与学院"></el-table-column>
                 <el-table-column prop="state" label="状态"><template #default="scope">
                         <div v-if=scope.row.state>
-                            <span style="color:skyblue;" v-if="scope.row.state==='未审核'"><b>{{ scope.row.state }}</b></span>
-                            <span style="color:crimson;" v-if="scope.row.state==='未通过'"><b>{{ scope.row.state }}</b></span>
-                            <span style="color:green;" v-if="scope.row.state==='已通过'"><b>{{ scope.row.state }}</b></span>
+                            <span style="color:skyblue;" v-if="scope.row.state === '未审核'"><b>{{ scope.row.state }}</b></span>
+                            <span style="color:crimson;" v-if="scope.row.state === '未通过'"><b>{{ scope.row.state }}</b></span>
+                            <span style="color:green;" v-if="scope.row.state === '已通过'"><b>{{ scope.row.state }}</b></span>
                         </div>
                     </template></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
-                        <el-button type="primary" plain v-if="scope.row.department" @Click="edit(scope.row.id)">修改</el-button>
+                        <el-button type="primary" plain v-if="scope.row.department"
+                            @Click="edit(scope.row.id)">修改</el-button>
                     </template></el-table-column>
             </el-table>
         </div>
@@ -60,6 +61,7 @@ import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
+store.routerPath='/index/one'
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -106,13 +108,13 @@ const edit = (id: number) => {
     })
 }
 const select = () => {
-    axios
-        .get("/selectEducationTraining", {
-            params: {
-                department: store.department
-            }
-        })
+    axios.get("/selectEducationTraining", {
+        params: {
+            department: store.department
+        }
+    })
         .then((response: AxiosResponse<any>) => {
+            console.log(response.data)
             if (response.data != "") {
                 tableData.value = response.data;
                 triggerRef(tableData);

@@ -1,7 +1,7 @@
 <template>
   <el-aside width="250px">
     <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-      :default-active="$router.path" text-color="#fff" :router="true">
+      :default-active="store.routerPath" text-color="#fff" :router="true">
       <el-sub-menu :index="String(111)">
         <template #title>
           <el-icon>
@@ -115,7 +115,10 @@
     </el-menu>
   </el-aside>
 </template>
-<script setup></script>
+<script setup>
+import { useMain } from "@/store/home";
+const store = useMain();
+</script>
 <style lang="scss" scoped>
 .el-aside {
   .el-menu {

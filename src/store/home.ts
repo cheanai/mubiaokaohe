@@ -21,7 +21,8 @@ export const useMain = defineStore("main", {
     phoneNumber: "",
     userId: 0,
     userName: "",
-    userType: ""
+    userType: "",
+    routerPath:""
   }),
   // 相当于计算属性
   getters: {},

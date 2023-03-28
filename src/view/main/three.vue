@@ -5,7 +5,7 @@
                 <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item>师资管理</el-breadcrumb-item>
                 <el-breadcrumb-item>教师培养与引进</el-breadcrumb-item>
-                <el-breadcrumb-item>宣传教育培养</el-breadcrumb-item>
+                <el-breadcrumb-item>报考博士数</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="butten_div">
@@ -22,10 +22,11 @@
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
                 row-class-name="table-row">
-                <el-table-column prop="title" label="主题"></el-table-column>
-                <el-table-column prop="type" label="类型"></el-table-column>
-                <el-table-column prop="location" label="地点"></el-table-column>
-                <el-table-column prop="time" label="开始时间"><template #default="scope">
+                <el-table-column prop="name" label="姓名"></el-table-column>
+                <el-table-column prop="sex" label="性别"></el-table-column>
+                <el-table-column prop="major" label="报考专业"></el-table-column>
+                <el-table-column prop="university" label="报考院校"></el-table-column>
+                <el-table-column prop="date" label="报考时间"><template #default="scope">
                         <div style="display: flex; align-items: center" v-if=scope.row.time>
                             <el-icon>
                                 <timer />
@@ -33,7 +34,7 @@
                             <span style="margin-left: 10px">{{ scope.row.time }}</span>
                         </div>
                     </template></el-table-column>
-                <el-table-column prop="department" label="参与学院"></el-table-column>
+                <el-table-column prop="department" label="所属学院"></el-table-column>
                 <el-table-column prop="state" label="状态"><template #default="scope">
                         <div v-if=scope.row.state>
                             <span style="color:skyblue;" v-if="scope.row.state==='未审核'"><b>{{ scope.row.state }}</b></span>
@@ -55,11 +56,12 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import DialogForm from "@/view/dialog/dialog.vue";
+import DialogForm from "@/view/dialog/dialogtwo.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
+store.routerPath='/index/three'
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -67,9 +69,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectEducationTrainingByTitle", {
+        axios.get("/selectApplyPhdByName", {
             params: {
-                title: input.value,
+                name: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -78,10 +80,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectEducationTrainingByTitleAndState", {
+        axios.get("/selectApplyPhdByNameAndState", {
             params: {
                 state: value.value,
-                title: input.value,
+                name: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -95,7 +97,7 @@ let tableData = ref([]);
 let info = ref();
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectEducationTrainingById", {
+    axios.get("/selectApplyPhdById", {
         params: {
             id: id
         }
@@ -107,7 +109,7 @@ const edit = (id: number) => {
 }
 const select = () => {
     axios
-        .get("/selectEducationTraining", {
+        .get("/selectApplyPhd", {
             params: {
                 department: store.department
             }
@@ -149,7 +151,7 @@ const dataFilter = () => {
             select();
             return
         }
-        axios.get("/selectEducationTrainingByState", {
+        axios.get("/selectApplyPhdByState", {
             params: {
                 state: value.value,
                 department: store.department

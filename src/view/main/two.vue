@@ -48,11 +48,12 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import DialogForm from "@/view/dialog/dialog.vue";
+import DialogForm from "@/view/dialog/dialogone.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
+store.routerPath='/index/two'
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -60,9 +61,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectEducationTrainingByTitle", {
+        axios.get("/selectDoctorInfoByName", {
             params: {
-                title: input.value,
+                name: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -71,10 +72,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectEducationTrainingByTitleAndState", {
+        axios.get("/selectDoctorInfoByNameAndState", {
             params: {
                 state: value.value,
-                title: input.value,
+                name: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -88,7 +89,7 @@ let tableData = ref([]);
 let info = ref();
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectEducationTrainingById", {
+    axios.get("/selectDoctorInfoById", {
         params: {
             id: id
         }
@@ -100,7 +101,7 @@ const edit = (id: number) => {
 }
 const select = () => {
     axios
-        .get("/selectEducationTraining", {
+        .get("/selectDoctorInfo", {
             params: {
                 department: store.department
             }
@@ -142,7 +143,7 @@ const dataFilter = () => {
             select();
             return
         }
-        axios.get("/selectEducationTrainingByState", {
+        axios.get("/selectDoctorInfoByState", {
             params: {
                 state: value.value,
                 department: store.department

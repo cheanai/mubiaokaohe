@@ -5,7 +5,7 @@
                 <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item>师资管理</el-breadcrumb-item>
                 <el-breadcrumb-item>教师培养与引进</el-breadcrumb-item>
-                <el-breadcrumb-item>宣传教育培养</el-breadcrumb-item>
+                <el-breadcrumb-item>教师交流培训</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="butten_div">
@@ -22,10 +22,10 @@
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
                 row-class-name="table-row">
-                <el-table-column prop="title" label="主题"></el-table-column>
-                <el-table-column prop="type" label="类型"></el-table-column>
-                <el-table-column prop="location" label="地点"></el-table-column>
-                <el-table-column prop="time" label="开始时间"><template #default="scope">
+                <el-table-column prop="teacherName" label="教师姓名"></el-table-column>
+                <el-table-column prop="trainingType" label="培训类型"></el-table-column>
+                <el-table-column prop="trainingTopic" label="培训主题"></el-table-column>
+                <el-table-column prop="trainingStartTime" label="开始时间"><template #default="scope">
                         <div style="display: flex; align-items: center" v-if=scope.row.time>
                             <el-icon>
                                 <timer />
@@ -33,7 +33,7 @@
                             <span style="margin-left: 10px">{{ scope.row.time }}</span>
                         </div>
                     </template></el-table-column>
-                <el-table-column prop="department" label="参与学院"></el-table-column>
+                <el-table-column prop="department" label="所属学院"></el-table-column>
                 <el-table-column prop="state" label="状态"><template #default="scope">
                         <div v-if=scope.row.state>
                             <span style="color:skyblue;" v-if="scope.row.state==='未审核'"><b>{{ scope.row.state }}</b></span>
@@ -60,6 +60,7 @@ import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
+store.routerPath='/index/four'
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -67,7 +68,7 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectEducationTrainingByTitle", {
+        axios.get("/selectTeacherTrainingByName", {
             params: {
                 title: input.value,
                 department: store.department
@@ -78,7 +79,7 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectEducationTrainingByTitleAndState", {
+        axios.get("/selectTeacherTrainingByNameAndState", {
             params: {
                 state: value.value,
                 title: input.value,
@@ -95,7 +96,7 @@ let tableData = ref([]);
 let info = ref();
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectEducationTrainingById", {
+    axios.get("/selectTeacherTrainingById", {
         params: {
             id: id
         }
@@ -107,7 +108,7 @@ const edit = (id: number) => {
 }
 const select = () => {
     axios
-        .get("/selectEducationTraining", {
+        .get("/selectTeacherTraining", {
             params: {
                 department: store.department
             }
@@ -149,7 +150,7 @@ const dataFilter = () => {
             select();
             return
         }
-        axios.get("/selectEducationTrainingByState", {
+        axios.get("/selectTeacherTrainingByState", {
             params: {
                 state: value.value,
                 department: store.department

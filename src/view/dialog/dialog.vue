@@ -35,6 +35,9 @@ const rules = {
   location: [
     { required: true, message: "请输入地点", trigger: "blur" }
   ],
+  time: [
+    { required: true, message: "请选择时间", trigger: "blur" }
+  ],
 };
 const dataform = reactive({
   form: {
