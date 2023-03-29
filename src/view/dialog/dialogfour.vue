@@ -3,14 +3,14 @@
       <el-form-item label="教师姓名" prop="teacherName">
         <el-input v-model.string="form.teacherName"></el-input>
       </el-form-item>
-      <el-form-item label="培训类型" prop="trainingType">
-        <el-input v-model.string="form.trainingType"></el-input>
+      <el-form-item label="访学地点" prop="destination">
+        <el-input v-model.string="form.destination"></el-input>
       </el-form-item>
-      <el-form-item label="培训主题" prop="trainingTopic">
-        <el-input v-model.string="form.trainingTopic"></el-input>
+      <el-form-item label="进修内容" prop="studyContent">
+        <el-input v-model.string="form.studyContent"></el-input>
       </el-form-item>
-      <el-form-item label="开始时间" prop="trainingStartTime">
-        <el-date-picker v-model="form.trainingStartTime" type="date" placeholder="Pick a day" />
+      <el-form-item label="开始时间" prop="startDate">
+        <el-date-picker v-model="form.startDate" type="date" placeholder="Pick a day" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm((ruleform))">提交</el-button>
@@ -29,30 +29,30 @@
     teacherName: [
       { required: true, message: "请输入教师姓名", trigger: "blur" }
     ],
-    trainingType: [
-      { required: true, message: "请输入培训类型", trigger: "blur" }
+    destination: [
+      { required: true, message: "请输入访学地点", trigger: "blur" }
     ],
-    trainingTopic: [
-      { required: true, message: "请输入培训主题", trigger: "blur" }
+    studyContent: [
+      { required: true, message: "请输入进修内容", trigger: "blur" }
     ],
-    trainingStartTime: [
-      { required: true, message: "请选择开始时间", trigger: "blur" }
+    startDate: [
+      { required: true, message: "请选择时间", trigger: "blur" }
     ],
   };
   const dataform = reactive({
     form: {
       id: -1,
       teacherName: "",
-      trainingType: "",
-      trainingTopic: "",
-      trainingStartTime: new Date(),
+      destination: "",
+      studyContent: "",
+      startDate: new Date(),
       department: store.department
     } as {
       id: number,
       teacherName: string,
-      trainingType: string,
-      trainingTopic: string,
-      trainingStartTime: Date,
+      destination: string,
+      studyContent: string,
+      startDate: Date,
       department: string
     }
   })
@@ -65,9 +65,9 @@
   const edit = () => {
     console.log(props.info);
     form.value.teacherName = props.info?.teacherName;
-    form.value.trainingType = props.info?.trainingType;
-    form.value.trainingTopic = props.info?.trainingTopic;
-    form.value.trainingStartTime = props.info?.trainingStartTime;
+    form.value.destination = props.info?.destination;
+    form.value.studyContent = props.info?.studyContent;
+    form.value.startDate = props.info?.startDate;
     form.value.id = props.info?.id;
   }
   if (props.info) {
@@ -79,10 +79,10 @@
     await formEl.validate((valid) => {
       if (valid) {
         if (form.value.id != -1) {
-          axios.post("/updateTeacherTraining", form.value)
+          axios.post("/updateStudyAbroad", form.value)
             .then(() => { emits("FatherClick") });
         } else {
-          axios.post("/insertTeacherTraining", form.value)
+          axios.post("/insertStudyAbroad", form.value)
             .then(() => { emits("FatherClick") });
         }
   

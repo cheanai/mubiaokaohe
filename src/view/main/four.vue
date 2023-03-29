@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import DialogForm from "@/view/dialog/dialog.vue";
+import DialogForm from "@/view/dialog/dialogthree.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
@@ -67,10 +67,9 @@ const searchdata = () => {
     console.log(input.value)
     console.log(value.value)
     if (value.value == "") {
-        console.log("--------")
         axios.get("/selectTeacherTrainingByName", {
             params: {
-                title: input.value,
+                teacherName: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -82,7 +81,7 @@ const searchdata = () => {
         axios.get("/selectTeacherTrainingByNameAndState", {
             params: {
                 state: value.value,
-                title: input.value,
+                teacherName: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {

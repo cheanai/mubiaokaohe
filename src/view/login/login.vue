@@ -8,7 +8,7 @@
       label-width="80px"
       class="demo-ruleForm main"
     >
-      <h2>后台管理系统</h2>
+      <h2>目标考核系统</h2>
       <el-form-item label="账号：" prop="username">
         <el-input v-model="ruleForm.username" autocomplete="off" />
       </el-form-item>

@@ -2,7 +2,7 @@
   <el-header>
     <div class="header">
       <div class="logo_div left"><img src="@/assets/logo.png" class="logo" />
-        <h2>后台管理系统</h2>
+        <h2>目标考核系统</h2>
       </div>
       <div class="logOff_div right"><span>欢迎{{store.name}}</span><span class="quit-login"><RouterLink to="/" @Click="logoff">退出登录</RouterLink></span></div>
     </div>

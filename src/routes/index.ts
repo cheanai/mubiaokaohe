@@ -18,6 +18,11 @@ let routes = [
         component: () => import("@/view/main/main.vue"),
       },
       {
+        path: "main1",
+        name: "main1",
+        component: () => import("@/view/main/main1.vue"),
+      },
+      {
         path: "one",
         name: "one",
         component: () => import("@/view/main/one.vue"),

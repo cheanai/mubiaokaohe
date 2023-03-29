@@ -9,6 +9,12 @@
           </el-icon>
           <span>师资管理</span>
         </template>
+        <el-menu-item index="/index/main1">
+          <el-icon>
+            <Histogram />
+          </el-icon>
+          <span>师资考核一览</span>
+        </el-menu-item>
         <el-sub-menu :index="String(1)">
           <template #title>
             <el-icon>

@@ -5,7 +5,7 @@
                 <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item>师资管理</el-breadcrumb-item>
                 <el-breadcrumb-item>教师培养与引进</el-breadcrumb-item>
-                <el-breadcrumb-item>宣传教育培养</el-breadcrumb-item>
+                <el-breadcrumb-item>访学单科进修</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="butten_div">
@@ -22,10 +22,10 @@
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
                 row-class-name="table-row">
-                <el-table-column prop="title" label="主题"></el-table-column>
-                <el-table-column prop="type" label="类型"></el-table-column>
-                <el-table-column prop="location" label="地点"></el-table-column>
-                <el-table-column prop="time" label="开始时间"><template #default="scope">
+                <el-table-column prop="teacherName" label="教师姓名"></el-table-column>
+                <el-table-column prop="destination" label="访学地点"></el-table-column>
+                <el-table-column prop="studyContent" label="进修内容"></el-table-column>
+                <el-table-column prop="startDate" label="开始时间"><template #default="scope">
                         <div style="display: flex; align-items: center" v-if=scope.row.time>
                             <el-icon>
                                 <timer />
@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import DialogForm from "@/view/dialog/dialog.vue";
+import DialogForm from "@/view/dialog/dialogfour.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
@@ -67,9 +67,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectEducationTrainingByTitle", {
+        axios.get("/selectStudyAbroadByTeacherName", {
             params: {
-                title: input.value,
+                teacherName: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -78,10 +78,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectEducationTrainingByTitleAndState", {
+        axios.get("/selectStudyAbroadByNameAndState", {
             params: {
                 state: value.value,
-                title: input.value,
+                teacherName: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -95,7 +95,7 @@ let tableData = ref([]);
 let info = ref();
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectEducationTrainingById", {
+    axios.get("/selectStudyAbroadById", {
         params: {
             id: id
         }
@@ -107,7 +107,7 @@ const edit = (id: number) => {
 }
 const select = () => {
     axios
-        .get("/selectEducationTraining", {
+        .get("/selectStudyAbroad", {
             params: {
                 department: store.department
             }
@@ -149,7 +149,7 @@ const dataFilter = () => {
             select();
             return
         }
-        axios.get("/selectEducationTrainingByState", {
+        axios.get("/selectStudyAbroadByState", {
             params: {
                 state: value.value,
                 department: store.department

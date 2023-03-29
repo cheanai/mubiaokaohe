@@ -10,6 +10,7 @@ import piniaPluginPersist from 'pinia-plugin-persist'
 import axios from '@/api/axiosInstance.js'
 //routes
 import router from "./routes/index"; 
+import * as echarts from "echarts";
 const pinia = createPinia()
 pinia.use(piniaPluginPersist)
 const app= createApp(App)
@@ -18,9 +19,11 @@ const app= createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }
-app.config.globalProperties.emitter = mitt() 
+app.config.globalProperties.emitter = mitt();
+app.config.globalProperties.$echarts = echarts;
 //pinia
 app.use(pinia)
+
 //routes 
 app.use(router)  
 app.use(ElementPlus)
