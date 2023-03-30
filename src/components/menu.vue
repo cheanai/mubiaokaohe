@@ -128,7 +128,7 @@ const store = useMain();
 <style lang="scss" scoped>
 .el-aside {
   .el-menu {
-    height: calc(100vh - 80px);
+    height: calc(100vh - 60px);
   }
 }
 

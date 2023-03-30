@@ -10,8 +10,8 @@
         </div>
         <div class="butten_div">
             <el-button type="primary" plain @click="dialogTableVisible = true">新增</el-button>
-            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据" destroy-on-close>
-                <DialogForm @FatherClick="Click" v-model:info="info"></DialogForm>
+            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据" @closed="oncolsed">
+                <DialogForm @FatherClick="Click" v-model:info="info" v-if="dialogTableVisible"></DialogForm>
             </el-dialog>
             <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -21,7 +21,7 @@
         </div>
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
-                row-class-name="table-row">
+                row-class-name="table-row" v-loading="loading">
                 <el-table-column prop="name" label="姓名"></el-table-column>
                 <el-table-column prop="sex" label="性别"></el-table-column>
                 <el-table-column prop="nationality" label="国籍"></el-table-column>
@@ -86,7 +86,12 @@ const searchdata = () => {
     }
 }
 let tableData = ref([]);
+const loading = ref(false)
 let info = ref();
+const oncolsed = () => {
+    info.value=null;
+    console.log(info.value)
+}
 const edit = (id: number) => {
     console.log(id);
     axios.get("/selectDoctorInfoById", {
@@ -100,6 +105,7 @@ const edit = (id: number) => {
     })
 }
 const select = () => {
+    loading.value = !loading.value;
     axios
         .get("/selectDoctorInfo", {
             params: {
@@ -110,6 +116,7 @@ const select = () => {
             if (response.data != "") {
                 tableData.value = response.data;
                 triggerRef(tableData);
+                loading.value = !loading.value;
                 console.log(tableData.value);
             }
         })

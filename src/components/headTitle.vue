@@ -44,16 +44,16 @@ text-decoration: none
 }
 
 .header {
-  height: 80px;
+  height: 60px;
 }
 
 .logo_div {
   width: 249px;
-  height: 80px;
+  height: 60px;
 }
 
 .el-header {
-  height: 80px;
+  height: 60px;
   background-image:url("@/assets/head.jpg");
 
   .logo {
@@ -63,8 +63,8 @@ text-decoration: none
   h2,
   .quit-login {
     text-align: center;
-    height: 80px;
-    line-height: 80px;
+    height: 60px;
+    line-height: 60px;
     color: #fff;
     margin-left: 20px;
   }

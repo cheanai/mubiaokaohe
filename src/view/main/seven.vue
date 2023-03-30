@@ -10,8 +10,8 @@
         </div>
         <div class="butten_div">
             <el-button type="primary" plain @click="dialogTableVisible = true">新增</el-button>
-            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据" destroy-on-close>
-                <DialogForm @FatherClick="Click" v-model:info="info"></DialogForm>
+            <el-dialog v-model="dialogTableVisible" :close-on-click-modal="false" title="新增数据" @closed="oncolsed">
+                <DialogForm @FatherClick="Click" v-model:info="info" v-if="dialogTableVisible"></DialogForm>
             </el-dialog>
             <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -21,28 +21,25 @@
         </div>
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
-                row-class-name="table-row">
-                <el-table-column prop="title" label="主题"></el-table-column>
-                <el-table-column prop="type" label="类型"></el-table-column>
-                <el-table-column prop="location" label="地点"></el-table-column>
-                <el-table-column prop="time" label="开始时间"><template #default="scope">
-                        <div style="display: flex; align-items: center" v-if=scope.row.time>
-                            <el-icon>
-                                <timer />
-                            </el-icon>
-                            <span style="margin-left: 10px">{{ scope.row.time }}</span>
-                        </div>
-                    </template></el-table-column>
+                row-class-name="table-row" v-loading="loading">
+                <el-table-column prop="name" label="教师姓名"></el-table-column>
+                <el-table-column prop="sex" label="性别"></el-table-column>
+                <el-table-column prop="education" label="学历"></el-table-column>
+                <el-table-column prop="teachingSubject" label="教学科目"></el-table-column>
+                <el-table-column prop="certificate" label="证书"></el-table-column>
                 <el-table-column prop="department" label="参与学院"></el-table-column>
                 <el-table-column prop="state" label="状态"><template #default="scope">
                         <div v-if=scope.row.state>
-                            <span style="color:skyblue;" v-if="scope.row.state==='未审核'"><b>{{ scope.row.state }}</b></span>
-                            <span style="color:crimson;" v-if="scope.row.state==='未通过'"><b>{{ scope.row.state }}</b></span>
-                            <span style="color:green;" v-if="scope.row.state==='已通过'"><b>{{ scope.row.state }}</b></span>
+                            <span style="color:skyblue;" v-if="scope.row.state === '未审核'"><b>{{ scope.row.state
+                            }}</b></span>
+                            <span style="color:crimson;" v-if="scope.row.state === '未通过'"><b>{{ scope.row.state
+                            }}</b></span>
+                            <span style="color:green;" v-if="scope.row.state === '已通过'"><b>{{ scope.row.state }}</b></span>
                         </div>
                     </template></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
-                        <el-button type="primary" plain v-if="scope.row.department" @Click="edit(scope.row.id)">修改</el-button>
+                        <el-button type="primary" plain v-if="scope.row.department"
+                            @Click="edit(scope.row.id)">修改</el-button>
                     </template></el-table-column>
             </el-table>
         </div>
@@ -55,7 +52,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import DialogForm from "@/view/dialog/dialog.vue";
+import DialogForm from "@/view/dialog/dialogsix.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
@@ -67,9 +64,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectEducationTrainingByTitle", {
+        axios.get("/selectBilingualTeacherByName", {
             params: {
-                title: input.value,
+                name: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -78,10 +75,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectEducationTrainingByTitleAndState", {
+        axios.get("/selectBilingualTeacherByNameAndState", {
             params: {
                 state: value.value,
-                title: input.value,
+                name: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -92,10 +89,15 @@ const searchdata = () => {
     }
 }
 let tableData = ref([]);
+const loading = ref(false);
 let info = ref();
+const oncolsed = () => {
+    info.value=null;
+    console.log(info.value)
+}
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectEducationTrainingById", {
+    axios.get("/selectBilingualTeacherById", {
         params: {
             id: id
         }
@@ -106,8 +108,9 @@ const edit = (id: number) => {
     })
 }
 const select = () => {
+    loading.value = !loading.value;
     axios
-        .get("/selectEducationTraining", {
+        .get("/selectBilingualTeacher", {
             params: {
                 department: store.department
             }
@@ -116,6 +119,7 @@ const select = () => {
             if (response.data != "") {
                 tableData.value = response.data;
                 triggerRef(tableData);
+                loading.value = !loading.value;
                 console.log(tableData.value);
             }
         })
@@ -144,12 +148,13 @@ const options = [
     }
 ];
 const dataFilter = () => {
+    loading.value = !loading.value;
     if (input.value == "") {
         if (value.value == "") {
             select();
             return
         }
-        axios.get("/selectEducationTrainingByState", {
+        axios.get("/selectBilingualTeacherByState", {
             params: {
                 state: value.value,
                 department: store.department
@@ -157,6 +162,7 @@ const dataFilter = () => {
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
             triggerRef(tableData);
+            loading.value = !loading.value;
             console.log(tableData.value);
         })
     } else {

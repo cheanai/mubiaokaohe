@@ -21,6 +21,7 @@ import headTitle from "@/components/headTitle.vue";
 .el-main{
   padding: 0px;
   background-image: url("@/assets/index.png");
+  height: calc(100vh - 60px);
 }
 body {
 user-select: none;
