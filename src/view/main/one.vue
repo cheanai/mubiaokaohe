@@ -121,12 +121,10 @@ const select = () => {
     })
         .then((response: AxiosResponse<any>) => {
             console.log(response.data)
-            if (response.data != "") {
                 tableData.value = response.data;
                 triggerRef(tableData);
                 loading.value = !loading.value;
                 console.log(tableData.value);
-            }
         })
         .catch((error: AxiosError) => {
             console.log(error);

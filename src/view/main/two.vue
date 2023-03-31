@@ -16,7 +16,7 @@
             <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <el-input v-model="input" class="w-50 m-2" placeholder="搜索主题" :prefix-icon="Search" />
+            <el-input v-model="input" class="w-50 m-2" placeholder="搜索姓名" :prefix-icon="Search" />
             <el-button plain @Click="searchdata">搜索</el-button>
         </div>
         <div class="table_div">
@@ -113,12 +113,10 @@ const select = () => {
             }
         })
         .then((response: AxiosResponse<any>) => {
-            if (response.data != "") {
                 tableData.value = response.data;
                 triggerRef(tableData);
                 loading.value = !loading.value;
                 console.log(tableData.value);
-            }
         })
         .catch((error: AxiosError) => {
             console.log(error);

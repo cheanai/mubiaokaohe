@@ -5,7 +5,7 @@
                 <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item>师资管理</el-breadcrumb-item>
                 <el-breadcrumb-item>教师培养与引进</el-breadcrumb-item>
-                <el-breadcrumb-item>宣传教育培养</el-breadcrumb-item>
+                <el-breadcrumb-item>双师型教师</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="butten_div">
@@ -16,7 +16,7 @@
             <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <el-input v-model="input" class="w-50 m-2" placeholder="搜索主题" :prefix-icon="Search" />
+            <el-input v-model="input" class="w-50 m-2" placeholder="搜索姓名" :prefix-icon="Search" />
             <el-button plain @Click="searchdata">搜索</el-button>
         </div>
         <div class="table_div">
@@ -40,6 +40,8 @@
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
                         <el-button type="primary" plain v-if="scope.row.department"
                             @Click="edit(scope.row.id)">修改</el-button>
+                        <!-- <el-button type="primary" plain v-if="scope.row.state==='未通过'"
+                            @Click="edit(scope.row.id)">修改</el-button> -->
                     </template></el-table-column>
             </el-table>
         </div>
@@ -57,6 +59,7 @@ import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
+store.routerPath='/index/seven'
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -92,7 +95,7 @@ let tableData = ref([]);
 const loading = ref(false);
 let info = ref();
 const oncolsed = () => {
-    info.value=null;
+    info.value = null;
     console.log(info.value)
 }
 const edit = (id: number) => {
@@ -116,12 +119,10 @@ const select = () => {
             }
         })
         .then((response: AxiosResponse<any>) => {
-            if (response.data != "") {
-                tableData.value = response.data;
-                triggerRef(tableData);
-                loading.value = !loading.value;
-                console.log(tableData.value);
-            }
+            tableData.value = response.data;
+            triggerRef(tableData);
+            loading.value = !loading.value;
+            console.log(tableData.value);
         })
         .catch((error: AxiosError) => {
             console.log(error);
@@ -148,12 +149,12 @@ const options = [
     }
 ];
 const dataFilter = () => {
-    loading.value = !loading.value;
+
     if (input.value == "") {
         if (value.value == "") {
             select();
             return
-        }
+        } loading.value = !loading.value;
         axios.get("/selectBilingualTeacherByState", {
             params: {
                 state: value.value,
