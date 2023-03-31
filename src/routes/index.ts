@@ -87,16 +87,6 @@ let routes = [
         name: "thirteen",
         component: () => import("@/view/main/thirteen.vue"),
       },
-      {
-        path: "fourteen",
-        name: "fourteen",
-        component: () => import("@/view/main/fourteen.vue"),
-      },
-      {
-        path: "fifteen",
-        name: "fifteen",
-        component: () => import("@/view/main/fifteen.vue"),
-      },
     ],
   },
   {

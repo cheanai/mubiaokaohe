@@ -95,12 +95,13 @@ const resetForm = () => {
 <style lang="scss">
 body {
   margin: 0px;
+  overflow: hidden;
 }
 
 .login-box {
   width: 100%;
   height: 100vh;
-  background-color: #ecf0f3;
+  background-image: url(@/assets/login.png);
   text-align: center;
   padding: 1px;
 
@@ -123,8 +124,8 @@ body {
   .main {
     position: relative;
     padding: 25px;
-    background-color: #ecf0f3;
-    box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9;
+    padding-left: 10px;
+    background-color: rgba(236, 240, 243, 0.8);
     border-radius: 20px;
     overflow: hidden;
   }
