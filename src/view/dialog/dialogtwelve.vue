@@ -19,7 +19,7 @@
         <el-input v-model.string="form.unit"></el-input>
       </el-form-item>
       <el-form-item label="申报时间" prop="date">
-        <el-date-picker v-model="form.time" type="date" placeholder="Pick a day" />
+        <el-date-picker v-model="form.date" type="date" placeholder="Pick a day" />
       </el-form-item>
       <el-form-item>
         <el-button sex="primary" @click="submitForm((ruleform))">提交</el-button>

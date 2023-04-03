@@ -7,6 +7,19 @@ let routes = [
     component: () => import("@/view/login/login.vue"),
   },
   {
+    path: "/index1",
+    name: "index1",
+    //redirect: { name: "main2" },
+    component: () => import("@/view/index/index1.vue"),
+    children:[
+      {
+        path: "fourteen",
+        name: "fourteen",
+        component: () => import("@/view/main/fourteen.vue"),
+      },
+    ]
+  },
+  {
     path: "/index",
     name: "index",
     redirect: { name: "main" },

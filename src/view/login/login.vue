@@ -1,9 +1,9 @@
 <template>
   <div class="login-box">
     <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="80px" class="demo-ruleForm">
-      <div class="loginForm" v-bind:class="{ class1: isShow,class3: isleft }">
+      <div class="loginForm" v-bind:class="{ class1: isShow, class3: isleft }">
         <Transition name="fadeform1">
-          <div v-if="!isShow" v-cloak>
+          <div v-if="!isShow" class="showdiv">
             <h2>欢迎登录</h2>
             <el-form-item label="账号：" prop="username">
               <el-input v-model="ruleForm.username" autocomplete="off" />
@@ -19,7 +19,7 @@
           </div>
         </Transition>
         <Transition name="fadeform">
-          <div v-if="isShow" v-cloak>
+          <div v-if="isShow" class="showdiv">
             <h2>忘记密码</h2>
             <el-form-item label="账号：" prop="username">
               <el-input v-model="ruleForm.username" autocomplete="off" />
@@ -35,19 +35,19 @@
           </div>
         </Transition>
       </div>
-      <div class="textRight" v-bind:class="{ class2: isShow,class4: isleft }">
-        <Transition name="fade">
-          <div v-if="!isShow"  v-cloak>
+      <div class="textRight" v-bind:class="{ class2: isShow, class4: isleft }">
+        <Transition name="fade" v-cloak>
+          <div v-if="!isShow" class="showdiv">
             <p>欢迎登录目标考核系统</p>
             <p>请输入账号和密码</p>
             <input @click="fotget" type="button" value="忘记密码" />
           </div>
         </Transition>
         <Transition name="fade1">
-          <div v-if="isShow"  v-cloak>
+          <div v-if="isShow" class="showdiv">
             <p>忘记密码了？</p>
             <p>请输入账号和邮箱</p>
-            <input @click="tologin" type="button" value="去登陆" />
+            <input @click="fotget" type="button" value="去登陆" />
           </div>
         </Transition>
       </div>
@@ -98,8 +98,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
           if (response.data != '') {
             store.setData(response.data);
             console.log(ruleForm.value.username);
-            // 保留当前页，页面跳转至 /home 页
-            router.push("/index");
+            if (store.userType === 'admin') {
+              router.push("/index1");
+            } else {
+              // 保留当前页，页面跳转至 /home 页
+              router.push("/index");
+            }
           };
         })
         .catch((error: AxiosError) => {
@@ -120,11 +124,8 @@ const resetForm = () => {
 };
 const fotget = () => {
   isShow.value = !isShow.value;
-  isleft.value=false;
-}
-const tologin = () => {
-  isleft.value = true;
-  isShow.value = false;
+  isleft.value = !isShow.value;
+
 }
 </script>
 
@@ -132,10 +133,12 @@ const tologin = () => {
 body {
   margin: 0px;
   overflow: hidden;
+
+  [v-cloak] {
+    display: none !important;
+  }
 }
-[v-cloak]{
-  display: none;
-}
+
 .login-box {
   width: 100%;
   height: 100vh;
@@ -153,54 +156,59 @@ body {
     border-radius: 20px;
     overflow: hidden;
     display: flex;
-    
+
   }
-  .fadeform-enter-from{
+
+  .fadeform-enter-from {
     opacity: 0;
   }
 
-  .fadeform-enter-active{
+  .fadeform-enter-active {
     transition: opacity 2s ease-out;
   }
 
-  .fadeform-enter-to{
+  .fadeform-enter-to {
     opacity: 1;
   }
-  .fadeform1-enter-from{
+
+  .fadeform1-enter-from {
     opacity: 0;
   }
 
-  .fadeform1-enter-active{
-    transition: opacity 3s ease-out;
-  }
-
-  .fadeform1-enter-to{
-    opacity: 1;
-  }
-  .fade1-enter-from{
-    opacity: 0;
-  }
-
-  .fade1-enter-active{
+  .fadeform1-enter-active {
     transition: opacity 2s ease-out;
-    transition-delay: 0.5s;
   }
 
-  .fade1-enter-to{
+  .fadeform1-enter-to {
     opacity: 1;
   }
-  .fade-enter-from{
+
+  .fade1-enter-from {
     opacity: 0;
   }
 
-  .fade-enter-active{
+  .fade1-enter-active {
     transition: opacity 2s ease-out;
-    transition-delay: 0.5s;
+    transition-delay: 1s;
   }
 
-  .fade-enter-to{
+  .fade1-enter-to {
     opacity: 1;
   }
+
+  .fade-enter-from {
+    opacity: 0;
+  }
+
+  .fade-enter-active {
+    transition: opacity 2s ease-out;
+    transition-delay: 1s;
+  }
+
+  .fade-enter-to {
+    opacity: 1;
+  }
+
   .login-btn {
     width: 100px;
   }
@@ -219,10 +227,6 @@ body {
     width: 500px;
     height: 500px;
     background-color: aliceblue;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
     .el-form-item {
       width: 400px;
@@ -238,10 +242,6 @@ body {
 
   .textRight {
     width: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
     p {
       font-family: "楷体";
@@ -264,26 +264,32 @@ body {
 
   }
 
+  .showdiv {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   .class1 {
     transform: translateX(500px);
     transition-duration: 2s;
-    transform: translateZ(1);
   }
 
   .class2 {
     transform: translateX(-500px);
     transition-duration: 2s;
-    transform: translateZ(2);
   }
+
   .class3 {
     transform: translateX(-1px);
     transition-duration: 2s;
-    transform: translateZ(2);
   }
+
   .class4 {
     transform: translateX(1px);
     transition-duration: 2s;
-    transform: translateZ(2);
   }
-}
-</style>
+}</style>
