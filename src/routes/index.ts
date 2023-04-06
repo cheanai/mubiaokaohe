@@ -7,6 +7,18 @@ let routes = [
     component: () => import("@/view/login/login.vue"),
   },
   {
+    path: "/index2",
+    name: "index2",
+    component: () => import("@/view/index/index2.vue"),
+    children:[
+      {
+        path: "fifteen",
+        name: "fifteen",
+        component: () => import("@/view/main/fifteen.vue"),
+      }
+    ]
+  },
+  {
     path: "/index1",
     name: "index1",
     //redirect: { name: "main2" },
@@ -16,6 +28,71 @@ let routes = [
         path: "fourteen",
         name: "fourteen",
         component: () => import("@/view/main/fourteen.vue"),
+      },
+      {
+        path: "one1",
+        name: "one1",
+        component: () => import("@/view/main/one.vue"),
+      },
+      {
+        path: "two1",
+        name: "two1",
+        component: () => import("@/view/main/two.vue"),
+      },
+      {
+        path: "three1",
+        name: "three1",
+        component: () => import("@/view/main/three.vue"),
+      },
+      {
+        path: "four1",
+        name: "four1",
+        component: () => import("@/view/main/four.vue"),
+      },
+      {
+        path: "five1",
+        name: "five1",
+        component: () => import("@/view/main/five.vue"),
+      },
+      {
+        path: "six1",
+        name: "six1",
+        component: () => import("@/view/main/six.vue"),
+      },
+      {
+        path: "seven1",
+        name: "seven1",
+        component: () => import("@/view/main/seven.vue"),
+      },
+      {
+        path: "eight1",
+        name: "eight1",
+        component: () => import("@/view/main/eight.vue"),
+      },
+      {
+        path: "nine1",
+        name: "nine1",
+        component: () => import("@/view/main/nine.vue"),
+      },
+      {
+        path: "ten1",
+        name: "ten1",
+        component: () => import("@/view/main/ten.vue"),
+      },
+      {
+        path: "eleven1",
+        name: "eleven1",
+        component: () => import("@/view/main/eleven.vue"),
+      },
+      {
+        path: "twelve1",
+        name: "twelve1",
+        component: () => import("@/view/main/twelve.vue"),
+      },
+      {
+        path: "thirteen1",
+        name: "thirteen1",
+        component: () => import("@/view/main/thirteen.vue"),
       },
     ]
   },

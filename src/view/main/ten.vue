@@ -37,10 +37,15 @@
                         </div>
                     </template></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
-                        <el-button type="primary" plain v-if="scope.row.department"
+                    <el-button type="primary" plain
+                            v-if="scope.row.department && store.department != '人事处管理员'"
                             @Click="edit(scope.row.id)">修改</el-button>
-                        <!-- <el-button type="primary" plain v-if="scope.row.state==='未通过'"
-                            @Click="edit(scope.row.id)">修改</el-button> -->
+                        <el-button type="primary" plain
+                            v-if="scope.row.department && store.department == '人事处管理员' && scope.row.state == '未审核'"
+                            @Click="tongguo(scope.row.id)">通过</el-button>
+                        <el-button type="primary" plain
+                            v-if="scope.row.department && store.department == '人事处管理员' && scope.row.state == '未审核'"
+                            @Click="dahui(scope.row.id)">打回</el-button>
                     </template></el-table-column>
             </el-table>
         </div>
@@ -58,7 +63,10 @@ import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
-store.routerPath='/index/ten'
+if(store.department=='人事处管理员'){
+    store.routerPath = '/index1/ten1'
+}else{
+store.routerPath='/index/ten'}
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -109,23 +117,64 @@ const edit = (id: number) => {
         dialogTableVisible.value = true;
     })
 }
+const tongguo = (id: number) => {
+    console.log(id);
+    axios.get("/updateTalentTeacherById", {
+        params: {
+            id: id,
+            state:'已通过'
+        }
+    }).then((response) => {
+        console.log(response.data)
+        select();
+    })
+}
+const dahui = (id: number) => {
+    console.log(id);
+    axios.get("/updateTalentTeacherById", {
+        params: {
+            id: id,
+            state:'未通过'
+        }
+    }).then((response) => {
+        console.log(response.data)
+        select();
+    })
+}
 const select = () => {
     loading.value = !loading.value;
-    axios
-        .get("/selectTalentTeacher", {
-            params: {
-                department: store.department
-            }
-        })
-        .then((response: AxiosResponse<any>) => {
+    console.log(loading.value)
+    if (store.department == "人事处管理员") {
+        axios
+            .get("/selectAllTalentTeacher")
+            .then((response: AxiosResponse<any>) => {
                 tableData.value = response.data;
                 triggerRef(tableData);
                 loading.value = !loading.value;
+                console.log(loading.value)
                 console.log(tableData.value);
-        })
-        .catch((error: AxiosError) => {
-            console.log(error);
-        });
+            })
+            .catch((error: AxiosError) => {
+                console.log(error);
+            });
+    } else {
+        axios
+            .get("/selectTalentTeacher", {
+                params: {
+                    department: store.department
+                }
+            })
+            .then((response: AxiosResponse<any>) => {
+                tableData.value = response.data;
+                triggerRef(tableData);
+                loading.value = !loading.value;
+                console.log(loading.value)
+                console.log(tableData.value);
+            })
+            .catch((error: AxiosError) => {
+                console.log(error);
+            });
+    }
 }
 select();
 const value = ref("");

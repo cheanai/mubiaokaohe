@@ -74,10 +74,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectForeignTeacherWorkloadByTeacherName", {
+        axios.get("/selectTargetAssessmentByCollege", {
             params: {
-                teacherName: input.value,
-                department: store.department
+                college: input.value,
             }
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
@@ -85,11 +84,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectForeignTeacherWorkloadByNameAndState", {
+        axios.get("/selectTargetAssessmentByCollegeAndState", {
             params: {
                 state: value.value,
-                teacherName: input.value,
-                department: store.department
+                college: input.value,
             }
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
@@ -107,7 +105,7 @@ const oncolsed = () => {
 }
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectForeignTeacherWorkloadById", {
+    axios.get("/selectTargetAssessmentById", {
         params: {
             id: id
         }
@@ -158,10 +156,9 @@ const dataFilter = () => {
             select();
             return
         } loading.value = !loading.value;
-        axios.get("/selectForeignTeacherWorkloadByState", {
+        axios.get("/selectTargetAssessmentByState", {
             params: {
                 state: value.value,
-                department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;

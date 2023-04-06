@@ -98,9 +98,11 @@ const submitForm = (formEl: FormInstance | undefined) => {
           if (response.data != '') {
             store.setData(response.data);
             console.log(ruleForm.value.username);
-            if (store.userType === 'admin') {
+            if (store.department === '人事处管理员') {
               router.push("/index1");
-            } else {
+            } else if(store.department === '发展规划处'){
+              router.push("/index2");
+            }else {
               // 保留当前页，页面跳转至 /home 页
               router.push("/index");
             }

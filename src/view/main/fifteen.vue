@@ -4,8 +4,8 @@
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item>师资管理</el-breadcrumb-item>
-                <el-breadcrumb-item>高层次人才队伍建设</el-breadcrumb-item>
-                <el-breadcrumb-item>新增副教授</el-breadcrumb-item>
+                <el-breadcrumb-item>教师培养与引进</el-breadcrumb-item>
+                <el-breadcrumb-item>宣传教育培养</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="butten_div">
@@ -16,17 +16,24 @@
             <el-select v-model="value" class="m-2" placeholder="选择状态" filterable :filter-method="dataFilter">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <el-input v-model="input" class="w-50 m-2" placeholder="搜索姓名" :prefix-icon="Search" />
+            <el-input v-model="input" class="w-50 m-2" placeholder="搜索主题" :prefix-icon="Search" />
             <el-button plain @Click="searchdata">搜索</el-button>
         </div>
         <div class="table_div">
             <el-table border :data="getTableData" stripe header-cell-class-name="my-header-cell-class"
                 row-class-name="table-row" v-loading="loading">
-                <el-table-column prop="name" label="姓名"></el-table-column>
-                <el-table-column prop="sex" label="性别"></el-table-column>
-                <el-table-column prop="title" label="职称"></el-table-column>
-                <el-table-column prop="researchField" label="研究领域"></el-table-column>
-                <el-table-column prop="department" label="参与学院"></el-table-column>
+                <el-table-column prop="college" label="二级学院"></el-table-column>
+                <el-table-column prop="secondaryIndicators" label="二级指标"></el-table-column>
+                <el-table-column prop="tertiaryIndicators" label="三级指标"></el-table-column>
+                <el-table-column prop="taskVolume" label="任务量"></el-table-column>
+                <el-table-column prop="date" label="时间"><template #default="scope">
+                        <div style="display: flex; align-items: center" v-if=scope.row.date>
+                            <el-icon>
+                                <timer />
+                            </el-icon>
+                            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        </div>
+                    </template></el-table-column>
                 <el-table-column prop="state" label="状态"><template #default="scope">
                         <div v-if=scope.row.state>
                             <span style="color:skyblue;" v-if="scope.row.state === '未审核'"><b>{{ scope.row.state
@@ -37,14 +44,11 @@
                         </div>
                     </template></el-table-column>
                 <el-table-column prop="opeation" label="操作"><template v-slot="scope">
-                    <el-button type="primary" plain
-                            v-if="scope.row.department && store.department != '人事处管理员'"
-                            @Click="edit(scope.row.id)">修改</el-button>
                         <el-button type="primary" plain
-                            v-if="scope.row.department && store.department == '人事处管理员' && scope.row.state == '未审核'"
+                            v-if="scope.row.college && scope.row.state == '未审核'"
                             @Click="tongguo(scope.row.id)">通过</el-button>
                         <el-button type="primary" plain
-                            v-if="scope.row.department && store.department == '人事处管理员' && scope.row.state == '未审核'"
+                            v-if="scope.row.college && scope.row.state == '未审核'"
                             @Click="dahui(scope.row.id)">打回</el-button>
                     </template></el-table-column>
             </el-table>
@@ -58,15 +62,16 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import DialogForm from "@/view/dialog/dialogeight.vue";
+import DialogForm from "@/view/dialog/dialog.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
-if(store.department=='人事处管理员'){
-    store.routerPath = '/index1/nine1'
-}else{
-store.routerPath='/index/nine'}
+if (store.department == '人事处管理员') {
+    store.routerPath = '/index1/one1'
+} else {
+    store.routerPath = '/index/one'
+}
 const dialogTableVisible = ref(false);
 const input = ref("");
 const searchdata = () => {
@@ -74,9 +79,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectAssociateProfessorByName", {
+        axios.get("/selectEducationTrainingByTitle", {
             params: {
-                name: input.value,
+                title: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -85,10 +90,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectAssociateProfessorByNameAndState", {
+        axios.get("/selectEducationTrainingByTitleAndState", {
             params: {
                 state: value.value,
-                name: input.value,
+                title: input.value,
                 department: store.department
             }
         }).then((response: AxiosResponse<any>) => {
@@ -99,15 +104,15 @@ const searchdata = () => {
     }
 }
 let tableData = ref([]);
-const loading = ref(false);
+const loading = ref(false)
 let info = ref();
 const oncolsed = () => {
-    info.value=null;
+    info.value = null;
     console.log(info.value)
 }
 const edit = (id: number) => {
     console.log(id);
-    axios.get("/selectAssociateProfessorById", {
+    axios.get("/selectEducationTrainingById", {
         params: {
             id: id
         }
@@ -119,34 +124,33 @@ const edit = (id: number) => {
 }
 const tongguo = (id: number) => {
     console.log(id);
-    axios.get("/updateAssociateProfessorById", {
+    axios.get("/updateEducationTrainingById", {
         params: {
             id: id,
-            state:'已通过'
+            state: '已通过'
         }
     }).then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         select();
     })
 }
 const dahui = (id: number) => {
     console.log(id);
-    axios.get("/updateAssociateProfessorById", {
+    axios.get("/updateEducationTrainingById", {
         params: {
             id: id,
-            state:'未通过'
+            state: '未通过'
         }
     }).then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         select();
     })
 }
 const select = () => {
     loading.value = !loading.value;
     console.log(loading.value)
-    if (store.department == "人事处管理员") {
         axios
-            .get("/selectAllAssociateProfessor")
+            .get("/selectAllTaskTable")
             .then((response: AxiosResponse<any>) => {
                 tableData.value = response.data;
                 triggerRef(tableData);
@@ -157,24 +161,6 @@ const select = () => {
             .catch((error: AxiosError) => {
                 console.log(error);
             });
-    } else {
-        axios
-            .get("/selectAssociateProfessor", {
-                params: {
-                    department: store.department
-                }
-            })
-            .then((response: AxiosResponse<any>) => {
-                tableData.value = response.data;
-                triggerRef(tableData);
-                loading.value = !loading.value;
-                console.log(loading.value)
-                console.log(tableData.value);
-            })
-            .catch((error: AxiosError) => {
-                console.log(error);
-            });
-    }
 }
 select();
 const value = ref("");
@@ -197,14 +183,12 @@ const options = [
     }
 ];
 const dataFilter = () => {
-    
     if (input.value == "") {
         if (value.value == "") {
             select();
             return
         }
-        loading.value = !loading.value;
-        axios.get("/selectAssociateProfessorByState", {
+        axios.get("/selectEducationTrainingByState", {
             params: {
                 state: value.value,
                 department: store.department
@@ -212,7 +196,6 @@ const dataFilter = () => {
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
             triggerRef(tableData);
-            loading.value = !loading.value;
             console.log(tableData.value);
         })
     } else {
