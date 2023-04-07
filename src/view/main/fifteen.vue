@@ -79,10 +79,9 @@ const searchdata = () => {
     console.log(value.value)
     if (value.value == "") {
         console.log("--------")
-        axios.get("/selectEducationTrainingByTitle", {
+        axios.get("/selectTaskTableByCollege", {
             params: {
-                title: input.value,
-                department: store.department
+                college: input.value,
             }
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
@@ -90,11 +89,10 @@ const searchdata = () => {
             console.log(tableData.value);
         })
     } else {
-        axios.get("/selectEducationTrainingByTitleAndState", {
+        axios.get("/selectTaskTableByCollegeAndState", {
             params: {
                 state: value.value,
-                title: input.value,
-                department: store.department
+                college: input.value
             }
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
@@ -110,21 +108,9 @@ const oncolsed = () => {
     info.value = null;
     console.log(info.value)
 }
-const edit = (id: number) => {
-    console.log(id);
-    axios.get("/selectEducationTrainingById", {
-        params: {
-            id: id
-        }
-    }).then((response) => {
-        console.log(response.data)
-        info.value = response.data;
-        dialogTableVisible.value = true;
-    })
-}
 const tongguo = (id: number) => {
     console.log(id);
-    axios.get("/updateEducationTrainingById", {
+    axios.get("/updateTaskTableById", {
         params: {
             id: id,
             state: '已通过'
@@ -136,7 +122,7 @@ const tongguo = (id: number) => {
 }
 const dahui = (id: number) => {
     console.log(id);
-    axios.get("/updateEducationTrainingById", {
+    axios.get("/updateTaskTableById", {
         params: {
             id: id,
             state: '未通过'
@@ -188,10 +174,9 @@ const dataFilter = () => {
             select();
             return
         }
-        axios.get("/selectEducationTrainingByState", {
+        axios.get("/selectTaskTableByState", {
             params: {
-                state: value.value,
-                department: store.department
+                state: value.value
             }
         }).then((response: AxiosResponse<any>) => {
             tableData.value = response.data;
