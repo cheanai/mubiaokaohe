@@ -2,7 +2,7 @@
   <el-aside width="250px">
     <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
       :default-active="store.routerPath" text-color="#fff" :router="true">
-      <el-menu-item index="/index1/main1">
+      <el-menu-item index="/index1/main2">
         <el-icon>
           <Histogram />
         </el-icon>

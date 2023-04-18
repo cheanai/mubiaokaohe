@@ -25,6 +25,11 @@ let routes = [
     component: () => import("@/view/index/index1.vue"),
     children:[
       {
+        path: "main2",
+        name: "main2",
+        component: () => import("@/view/main/main2.vue"),
+      },
+      {
         path: "fourteen",
         name: "fourteen",
         component: () => import("@/view/main/fourteen.vue"),
