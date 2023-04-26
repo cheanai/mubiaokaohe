@@ -56,6 +56,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
+import { ElMessage } from 'element-plus'
 import DialogForm from "@/view/dialog/dialogone.vue";
 import { useMain } from "@/store/home";
 import axios from "@/api/axiosInstance";
@@ -96,6 +97,12 @@ const searchdata = () => {
         })
     }
 }
+const open1 = () => {
+  ElMessage({
+    message: '审核成功',
+    type: 'success',
+  })
+}
 let tableData = ref([]);
 const loading = ref(false)
 let info = ref();
@@ -125,6 +132,7 @@ const tongguo = (id: number) => {
     }).then((response) => {
         console.log(response.data)
         select();
+        open1();
     })
 }
 const dahui = (id: number) => {
@@ -137,6 +145,7 @@ const dahui = (id: number) => {
     }).then((response) => {
         console.log(response.data)
         select();
+        open1();
     })
 }
 const select = () => {

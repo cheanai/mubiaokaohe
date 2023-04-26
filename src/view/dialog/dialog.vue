@@ -22,6 +22,7 @@
 import axios from '@/api/axiosInstance';
 import { useMain } from '@/store/home'
 import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
 const emits = defineEmits(["FatherClick"]);
 const store = useMain();
 const ruleform = ref<FormInstance>()
@@ -74,6 +75,18 @@ if (props.info) {
   console.log(props.info);
   edit();
 }
+const open1 = () => {
+  ElMessage({
+    message: '新增数据成功',
+    type: 'success',
+  })
+}
+const open2 = () => {
+  ElMessage({
+    message: '修改数据成功',
+    type: 'success',
+  })
+}
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid) => {
@@ -81,9 +94,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       if (form.value.id != -1) {
         axios.post("/updateEducationTraining", form.value)
           .then(() => { emits("FatherClick") });
+          open2();
       } else {
         axios.post("/insertEducationTraining", form.value)
           .then(() => { emits("FatherClick") });
+          open1();
       }
 
     } else {

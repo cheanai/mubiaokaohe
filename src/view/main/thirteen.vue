@@ -60,6 +60,7 @@
 import { Search } from "@element-plus/icons-vue";
 import DialogForm from "@/view/dialog/dialogsix.vue";
 import { useMain } from "@/store/home";
+import { ElMessage } from 'element-plus'
 import axios from "@/api/axiosInstance";
 import { AxiosResponse, AxiosError } from "axios";
 const store = useMain();
@@ -117,6 +118,12 @@ const edit = (id: number) => {
         dialogTableVisible.value = true;
     })
 }
+const open1 = () => {
+  ElMessage({
+    message: '审核成功',
+    type: 'success',
+  })
+}
 const tongguo = (id: number) => {
     console.log(id);
     axios.get("/updateForeignTeacherWorkloadById", {
@@ -127,6 +134,7 @@ const tongguo = (id: number) => {
     }).then((response) => {
         console.log(response.data)
         select();
+        open1();
     })
 }
 const dahui = (id: number) => {
@@ -139,6 +147,7 @@ const dahui = (id: number) => {
     }).then((response) => {
         console.log(response.data)
         select();
+        open1();
     })
 }
 const select = () => {
