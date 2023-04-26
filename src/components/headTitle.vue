@@ -4,9 +4,14 @@
       <div class="logo_div left"><img src="@/assets/logo.png" class="logo" />
         <h2>目标考核系统</h2>
       </div>
-      <div class="logOff_div right"><span id="huan">欢迎{{ store.name }}</span>
+      <div class="logOff_div right">
+        <el-badge :value="12" class="item">
+          <el-button round @Click="drawer = true"><el-icon>
+              <BellFilled />
+            </el-icon>通知</el-button>
+        </el-badge>
+        <span class="huan">欢迎{{ store.name }}</span>
         <div class="tou">
-
           <el-dropdown :hide-on-click="false">
             <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
             <template #dropdown>
@@ -17,7 +22,14 @@
             </template>
           </el-dropdown>
           <el-drawer v-model="drawer" title="I am the title" :with-header="false">
-            <span>Hi there!</span>
+            <span class="huan">通知</span>
+            <div v-for="notificat in notification" :key="notificat.id">
+              <h3>{{ notificat.title }}</h3>
+              <p>作者: {{ notificat.publisher }}</p>
+              <p>下达时间: {{ notificat.publishDate }}</p>
+              <p>正文: {{ notificat.content }}</p>
+              <hr>
+            </div>
           </el-drawer>
         </div>
       </div>
@@ -33,6 +45,16 @@ const logoff = () => {
   store.$reset();
   window.location.reload();
 }
+const dataform = reactive({
+  notification: {
+      id: -1,
+      publisher: "111",
+      publishDate: "",
+      title: "",
+      content: "",
+    } 
+  });
+let { notification } = toRefs(dataform);
 </script>
 
 <style lang="scss" scoped>
@@ -40,7 +62,12 @@ const logoff = () => {
   padding: 0px;
 }
 
-#huan {
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
+
+.huan {
   padding-top: 10px;
   font-family: "黑体";
   font-weight: bold;
@@ -92,5 +119,4 @@ const logoff = () => {
     margin-left: 20px;
     margin-top: 10px;
   }
-}
-</style>
+}</style>
